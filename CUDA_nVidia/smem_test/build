@@ -1,0 +1,15 @@
+#!/bin/bash
+arch=CC30
+mrch=sm_30
+INC="-I./ -I/usr/local/cuda-9.0/include -I/usr/local/cuda-9.0/samples/common/inc" 
+cuLIB="/usr/local/cuda-9.0/lib64"
+LIB="-L${cuLIB}"
+fm= #--use_fast_math #coment it if you whant divisions and transcend funcs to be IEEE or something similar to IEEE
+nvcc -w -Xcompiler -fPIC $INC -O3 -c -arch=$mrch $fm test.cu -o test_cu.obj
+nvcc -w -Xcompiler -fPIC $INC -O3 -c -arch=$mrch $fm ../service.cu -o service.obj
+g++ $INC -std=c++11 -Wall -Werror test.cpp -c -O3 -o test.obj
+
+g++ $LIB test.obj test_cu.obj service.obj -lcudart -Wl,-rpath=${cuLIB} -o test
+
+rm -f *.obj
+

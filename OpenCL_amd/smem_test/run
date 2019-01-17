@@ -1,0 +1,3 @@
+#!/bin/bash
+g++ -O3 test.cpp ../helpers.cpp -lOpenCL -o test && ./test
+
